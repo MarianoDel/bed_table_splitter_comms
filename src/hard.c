@@ -10,7 +10,6 @@
 #include "hard.h"
 #include "stm32f10x.h"
 
-#include "adc.h"
 #include "tim.h"
 #include "usart.h"
 
@@ -21,11 +20,10 @@
 
 
 // Externals -------------------------------------------------------------------
-extern volatile unsigned short adc_ch [];
+
 
 
 // Globals ---------------------------------------------------------------------
-unsigned char led_status = LED_VOLTAGE_GOOD;
 volatile unsigned short led_timer = 0;
 
 
@@ -33,107 +31,141 @@ volatile unsigned short led_timer = 0;
 
 
 // Module Functions ------------------------------------------------------------
-void Led_Slave_On (void)
+void Led_Act_Table_On (void)
 {
-    LED_SLAVE_ON;
+    LED_ACT_TABLE_ON;
 }
 
 
-void Led_Master_On (void)
+void Led_Act_Bed_On (void)
 {
-    LED_MASTER_ON;
+    LED_ACT_BED_ON;
 }
 
 
-void Led_Error_On (void)
+void Led1_On (void)
 {
-    LED_ERROR_ON;
+    LED1_ON;
 }
 
 
-void Led_Slave_Off (void)
+void Led_Act_Table_Off (void)
 {
-    LED_SLAVE_OFF;
+    LED_ACT_TABLE_OFF;
 }
 
 
-void Led_Master_Off (void)
+void Led_Act_Bed_Off (void)
 {
-    LED_MASTER_OFF;
+    LED_ACT_BED_OFF;
 }
 
 
-void Led_Error_Off (void)
+void Led1_Off (void)
 {
-    LED_ERROR_OFF;
+    LED1_OFF;
 }
 
 
-unsigned char Led_Slave_Is_On (void)
+unsigned char Led_Act_Table_Is_On (void)
 {
-    return LED_SLAVE;
+    return LED_ACT_TABLE;
 }
 
 
-unsigned char Led_Master_Is_On (void)
+unsigned char Led_Act_Bed_Is_On (void)
 {
-    return LED_MASTER;
+    return LED_ACT_BED;
 }
 
 
-unsigned char Led_Error_Is_On (void)
+unsigned char Led1_Is_On (void)
 {
-    return LED_ERROR;
+    return LED1;
 }
 
 
-unsigned char Master_Pin (void)
+unsigned char In2_Pin (void)
 {
-    return MASTER_SLAVE;
+    return IN2;
 }
 
 
-void Enable_DE (void)
+unsigned char In1_Pin (void)
 {
-    SW_RX_TX_ON;
+    return IN1;
 }
 
 
-void Disable_DE (void)
+void Out1_On (void)
 {
-    SW_RX_TX_OFF;
+    OUT1_ON;
 }
 
 
-void Change_Led_Voltage (unsigned char new_status)
+void Out2_On (void)
 {
-    led_status = new_status;
+    OUT2_ON;
 }
 
 
-void Update_Led_Voltage (void)
+void Pulse_Top_On (void)
 {
-    switch (led_status)
-    {
-    case LED_OVERVOLTAGE:
-        if (!led_timer)
-        {
-            led_timer = 200;
-            if (Led_Error_Is_On())
-                Led_Error_Off();
-            else
-                Led_Error_On();
-        }
-        break;
+    PULSE_TOP_ON;
+}
 
-    case LED_UNDERVOLTAGE:
-        Led_Error_On();
-        break;
 
-    case LED_VOLTAGE_GOOD:
-        Led_Error_Off();
-        break;
-    }
+void Pulse_Bed_On (void)
+{
+    PULSE_BED_ON;
+}
+
+
+void Out1_Off (void)
+{
+    OUT1_OFF;
+}
+
+
+void Out2_Off (void)
+{
+    OUT2_OFF;
+}
+
+
+void Pulse_Top_Off (void)
+{
+    PULSE_TOP_OFF;
+}
+
+
+void Pulse_Bed_Off (void)
+{
+    PULSE_BED_OFF;
+}
+
+
+unsigned char Out1_Is_On (void)
+{
+    return OUT1;
+}
+
+
+unsigned char Out2_Is_On (void)
+{
+    return OUT2;
+}
+
+
+unsigned char Pulse_Top_Is_On (void)
+{
+    return PULSE_TOP;
+}
+
+
+unsigned char Pulse_Bed_Is_On (void)
+{
+    return PULSE_BED;
 }
 
 

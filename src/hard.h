@@ -35,22 +35,6 @@
 //-------- Kind of Reports Sended ----------------
 
 //-------- Others Configurations depending on the formers ------------
-#define OVERVOLTAGE    2895    // 6.5V * 0.211 = 1.371V / 3.3V * 4095 = 1702
-#define UNDERVOLTAGE    1181    // 4.5 * 0.211 = 0.952V / 3.3V * 4095 = 1181
-
-enum {
-    OVERVOLTAGE_STATUS,
-    UNDERVOLTAGE_STATUS,
-    VOLTAGE_GOOD_STATUS
-
-};
-
-#define LED_OVERVOLTAGE    0
-#define LED_UNDERVOLTAGE    1
-#define LED_VOLTAGE_GOOD    2
-#define OVERVOLTAGE_CMD    LED_OVERVOLTAGE
-#define UNDERVOLTAGE_CMD    LED_UNDERVOLTAGE
-#define VOLTAGE_GOOD_CMD    LED_VOLTAGE_GOOD
 
 
 //-------- Oscillator and Crystal selection (Freq in startup_clocks.h) ---
@@ -92,10 +76,13 @@ enum {
 #ifdef HARDWARE_VERSION_1_0
 
 // PA defines ----
-// PA0
-// PA1 NC
+// PA0 NC
+// PA1 
+#define PULSE_BED    ((GPIOA->ODR & 0x0002) != 0)
+#define PULSE_BED_ON    (GPIOA->BSRR = 0x00000002)
+#define PULSE_BED_OFF    (GPIOA->BSRR = 0x00020000)
 
-// PA2 PA3 Alternative Usart2 Tx Rx (Channel 4)
+// PA2 PA3 Alternative Usart2 Tx Rx (Bed)
 
 // PA4
 // PA5
@@ -103,7 +90,7 @@ enum {
 // PA7
 // PA8 NC
 
-// PA9 PA10 Alternative Usart1 Tx Rx (Channel 1)
+// PA9 PA10 Alternative Usart1 Tx Rx (Rpi)
 
 // PA11
 // PA12
@@ -111,12 +98,8 @@ enum {
 
 // PB defines ----
 // PB0 
-// PB1 NC
-
-//PB2
-#define SW_RX_TX    ((GPIOB->ODR & 0x0004) != 0)
-#define SW_RX_TX_ON    (GPIOB->BSRR = 0x00000004)
-#define SW_RX_TX_OFF    (GPIOB->BSRR = 0x00040000)
+// PB1
+// PB2 NC
 
 // PB3 PB4 NC jtag
 // PB5 
@@ -125,75 +108,100 @@ enum {
 // PB8
 // PB9 NC
 
-// PB10 PB11 Alternative Usart3 Tx Rx (Rs485)
+// PB10 PB11 Alternative Usart3 Tx Rx (Top)
 
 // PB12
-#define LED_SLAVE    ((GPIOB->ODR & 0x1000) != 0)
-#define LED_SLAVE_ON    (GPIOB->BSRR = 0x00001000)
-#define LED_SLAVE_OFF    (GPIOB->BSRR = 0x10000000)
-
-// PB13
-#define LED_MASTER    ((GPIOB->ODR & 0x2000) != 0)
-#define LED_MASTER_ON    (GPIOB->BSRR = 0x00002000)
-#define LED_MASTER_OFF    (GPIOB->BSRR = 0x20000000)
+// PB13 NC
 
 // PB14
-#define LED_ERROR    ((GPIOB->ODR & 0x4000) != 0)
-#define LED_ERROR_ON    (GPIOB->BSRR = 0x00004000)
-#define LED_ERROR_OFF    (GPIOB->BSRR = 0x40000000)
+#define PULSE_TOP    ((GPIOB->ODR & 0x4000) != 0)
+#define PULSE_TOP_ON    (GPIOB->BSRR = 0x00004000)
+#define PULSE_TOP_OFF    (GPIOB->BSRR = 0x40000000)
 
 // PB15
-#define MASTER_SLAVE    ((GPIOB->IDR & 0x8000) == 0)
-
+#define OUT2    ((GPIOB->ODR & 0x8000) != 0)
+#define OUT2_ON    (GPIOB->BSRR = 0x00008000)
+#define OUT2_OFF    (GPIOB->BSRR = 0x80000000)
 
 // PC defines ----
-// PC0
+// PC0 NC
 // PC1
+#define LED_ACT_TABLE    ((GPIOC->ODR & 0x0002) != 0)
+#define LED_ACT_TABLE_ON    (GPIOC->BSRR = 0x00000002)
+#define LED_ACT_TABLE_OFF    (GPIOC->BSRR = 0x00020000)
+
 // PC2
-// PC3 NC
+#define LED_ACT_BED    ((GPIOC->ODR & 0x0004) != 0)
+#define LED_ACT_BED_ON    (GPIOC->BSRR = 0x00000004)
+#define LED_ACT_BED_OFF    (GPIOC->BSRR = 0x00040000)
 
-// PC4 Analog input VOLT_DETECT 
+// PC3
+#define LED1    ((GPIOC->ODR & 0x0008) != 0)
+#define LED1_ON    (GPIOC->BSRR = 0x00000008)
+#define LED1_OFF    (GPIOC->BSRR = 0x00080000)
 
-// PC5
+// PC4
+// PC5 NC
+
 // PC6
-// PC7 
+#define OUT1    ((GPIOC->ODR & 0x0040) != 0)
+#define OUT1_ON    (GPIOC->BSRR = 0x00000040)
+#define OUT1_OFF    (GPIOC->BSRR = 0x00400000)
+
+// PC7
+#define IN1    ((GPIOC->IDR & 0x0080) == 0)
+
 // PC8
-// PC9 NC
+#define IN2    ((GPIOC->IDR & 0x0100) == 0)
 
-// PC10 PC11 Alternative Uart4 Tx Rx (Channel 2)
-
-// PC12 Alternative Uart5 Tx (Channel 3)
-
-// PC13 PC14 PC15 NC
+// PC9
+// PC10
+// PC11
+// PC12
+// PC13
+// PC14
+// PC15 NC
 
 // PD defines ----
-// PD0 PD1 NC
+// PD0 PD1 PD2 NC
 
-// PD2 Alternative Uart5 Rx (Channel 3)
 
 #endif //HARDWARE_VERSION_1_0
 
 
 
 // Module Exported Functions ---------------------------------------------------
-void Enable_DE (void);
-void Disable_DE (void);
+void Led_Act_Table_On (void);
+void Led_Act_Bed_On (void);
+void Led1_On (void);
 
-void Led_Slave_On (void);
-void Led_Master_On (void);
-void Led_Error_On (void);
+void Led_Act_Table_Off (void);
+void Led_Act_Bed_Off (void);
+void Led1_Off (void);
 
-void Led_Slave_Off (void);
-void Led_Master_Off (void);
-void Led_Error_Off (void);
+unsigned char Led_Act_Table_Is_On (void);
+unsigned char Led_Act_Bed_Is_On (void);
+unsigned char Led1_Is_On (void);
 
-unsigned char Led_Slave_Is_On (void);
-unsigned char Led_Master_Is_On (void);
-unsigned char Led_Error_Is_On (void);
+unsigned char In2_Pin (void);
+unsigned char In1_Pin (void);
 
-unsigned char Master_Pin (void);
+void Out1_On (void);
+void Out2_On (void);
+void Pulse_Top_On (void);
+void Pulse_Bed_On (void);
 
-void Change_Led_Voltage (unsigned char new_status);
-void Update_Led_Voltage (void);
+void Out1_Off (void);
+void Out2_Off (void);
+void Pulse_Top_Off (void);
+void Pulse_Bed_Off (void);
 
+unsigned char Out1_Is_On (void);
+unsigned char Out2_Is_On (void);
+unsigned char Pulse_Top_Is_On (void);
+unsigned char Pulse_Bed_Is_On (void);
+
+#define Led_Act_Top_On()    Led_Act_Table_On()
+#define Led_Act_Top_Off()    Led_Act_Table_Off()
+#define Led_Act_Top_Is_On()    Led_Act_Table_Is_On()
 #endif

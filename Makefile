@@ -65,7 +65,7 @@ LINKER = ./startup_src
 SRC  = ./src/main.c
 SRC += ./src/gpio.c
 SRC += ./src/it.c
-SRC += ./src/adc.c
+# SRC += ./src/adc.c
 SRC += ./src/usart.c
 SRC += ./src/tim.c
 SRC += ./src/dma.c
@@ -76,7 +76,7 @@ SRC += ./src/hard.c
 SRC += ./src/comms.c
 SRC += ./src/utils.c
 SRC += ./src/test_functions.c
-SRC += ./src/master_slave.c
+# SRC += ./src/master_slave.c
 
 # SRC += ./src/flash_program.c
 
