@@ -207,7 +207,7 @@ void Usart1SendUnsigned (unsigned char * send, unsigned char size)
 }
 
 
-unsigned char Usart1ReadBuffer (char * bout, unsigned short max_len)
+unsigned short Usart1ReadBuffer (char * bout, unsigned short max_len)
 {
     unsigned int len;
 
@@ -229,7 +229,7 @@ unsigned char Usart1ReadBuffer (char * bout, unsigned short max_len)
     //pointer adjust after copy
     prx1 = rx1buff;
 
-    return (unsigned char) len;
+    return (unsigned short) len;
 }
 
 
@@ -360,7 +360,7 @@ void Usart2SendUnsigned (unsigned char * send, unsigned char size)
 }
 
 
-unsigned char Usart2ReadBuffer (char * bout, unsigned short max_len)
+unsigned short Usart2ReadBuffer (char * bout, unsigned short max_len)
 {
     unsigned int len;
 
@@ -382,7 +382,7 @@ unsigned char Usart2ReadBuffer (char * bout, unsigned short max_len)
     // pointer adjust after copy
     prx2 = rx2buff;
 
-    return (unsigned char) len;
+    return (unsigned short) len;
 }
 
 
@@ -581,8 +581,6 @@ void USART3_IRQHandler (void)
     {
         dummy = USART3->DR & 0x0FF;
 
-	Comms_Rs232_Kick ();
-	
         if (prx3 < &rx3buff[SIZEOF_RXDATA - 1])
         {
             //al /r no le doy bola

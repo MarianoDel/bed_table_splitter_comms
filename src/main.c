@@ -21,8 +21,7 @@
 #include "usart_channels.h"
 #include "usart.h"
 
-#include "comms.h"
-#include "master_slave.h"
+#include "manager.h"
 #include "test_functions.h"
 
 #include <stdio.h>
@@ -57,93 +56,46 @@ int main (void)
         SysTickError();
 
     // Hardware Tests
-    TF_Hardware_Tests ();
+    // TF_Hardware_Tests ();
     // End of Hardware Tests
     
     // --- main program inits. ---
-    // Disable_DE();
+    Out1_Off ();
+    Out2_Off ();
+    Pulse_Top_Off ();
+    Pulse_Bed_Off ();
+
+    Led_Act_Table_Off ();
+    Led_Act_Bed_Off ();
+    Led1_Off ();
     
-    // //-- ADC and DMA configuration
-    // AdcConfig ();
-    // DMAConfig();
-    // DMA1_Channel1->CCR |= DMA_CCR1_EN;
-    // AdcStart ();
-
-    // // -- Enable Comms Module
-    // Comms_Init ();
+    // -- Enable all Usarts
+    UsartRpiConfig ();
+    UsartTopConfig ();
+    UsartBedConfig ();
     
-    // // -- Enable all Usarts
-    // UsartChannel1Config();
-    // UsartChannel2Config();
-    // UsartChannel3Config();
-    // UsartChannel4Config();
-    // UsartRs485Config();
+
+    //-- Main Loop --------------------------
     
-    // if (Master_Is_On ())
-    // {
-    //     Master_Slave_Config(MASTER_CONFIG);
+    while (1)
+    {
+	// Manager_Rpi_Loop ();
+	Manager_Only_Top ();
 
-    //     Led_Slave_On();
-    //     Led_Master_On();
-    //     Led_Error_On();
-    //     Wait_ms (500);
-    //     Led_Slave_Off();
-    //     Led_Master_Off();
-    //     Led_Error_Off();
-        
-    // }
-    // else
-    // {
-    //     Master_Slave_Config(SLAVE_CONFIG);
+	// Manager_Only_Bed ();
 
-    //     for (int i = 0; i < 3; i++)
-    //     {
-    //         Led_Slave_On();
-    //         Led_Master_On();
-    //         Led_Error_On();
-    //         Wait_ms (500);
-    //         Led_Slave_Off();
-    //         Led_Master_Off();
-    //         Led_Error_Off();
-    //         Wait_ms (500);	    
-    //     }
-        
-    // }
+	// Manager_Top_Bed ();
 
-    // //-- Main Loop --------------------------
-    // unsigned char voltage_status = 0;
-    
-    // while (1)
-    // {
-    //     // loop comms
-    //     Master_Slave ();
-
-    //     // check voltage status every 500ms
-    // 	if (!timer_standby)
-    // 	{
-    // 	    timer_standby = 500;
-    // 	    if ((Voltage_Sense > OVERVOLTAGE) &&
-    // 		(voltage_status != OVERVOLTAGE_STATUS))
-    // 	    {
-    // 		Change_Led_Voltage(OVERVOLTAGE_CMD);
-    // 		voltage_status = OVERVOLTAGE_STATUS;
-    // 	    }
-    // 	    else if ((Voltage_Sense < UNDERVOLTAGE) &&
-    // 		     (voltage_status != UNDERVOLTAGE_STATUS))
-    // 	    {
-    // 		Change_Led_Voltage(UNDERVOLTAGE_CMD);
-    // 		voltage_status = UNDERVOLTAGE_STATUS;            
-    // 	    }
-    // 	    else if (voltage_status != VOLTAGE_GOOD_STATUS)
-    // 	    {
-    // 		Change_Led_Voltage(VOLTAGE_GOOD_CMD);
-    // 		voltage_status = VOLTAGE_GOOD_STATUS;            
-    // 	    }
-    // 	}
-	
-    //     // update the led
-    //     Update_Led_Voltage ();
-    // }
+	//led is alive
+	// if (!timer_standby)
+	// {
+	//     timer_standby = 300;
+	//     if (Led1_Is_On())
+	// 	Led1_Off();
+	//     else
+	// 	Led1_On();
+	// }
+    }
 }
 
 //--- End of Main ---//
@@ -158,9 +110,9 @@ void TimingDelay_Decrement(void)
     if (timer_standby)
         timer_standby--;
 
-    // Master_Slave_Timeouts ();
+    Manager_Timeouts ();
 
-    Comms_Timeouts ();
+    // Comms_Timeouts ();
 
     // UsartTxTimeouts ();
 }

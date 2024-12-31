@@ -16,4 +16,4 @@ GTAGS
 *.gcda
 *.gcno
 *.pyc
-
+*~

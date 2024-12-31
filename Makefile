@@ -73,10 +73,9 @@ SRC += ./src/hard.c
 # SRC += ./src/i2c.c
 # SRC += ./src/dac.c
 # SRC += ./src/dsp.c
-SRC += ./src/comms.c
 SRC += ./src/utils.c
 SRC += ./src/test_functions.c
-# SRC += ./src/master_slave.c
+SRC += ./src/manager.c
 
 # SRC += ./src/flash_program.c
 
